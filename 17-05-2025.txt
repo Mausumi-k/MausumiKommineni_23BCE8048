@@ -1,0 +1,33 @@
+show databases;
+create database vit;
+CREATE TABLE vitap(
+		f_name VARCHAR(200),
+        reg_no VARCHAR(20) primary key,
+        school varchar(100),
+        passout_yr int
+);
+INSERT into vitap(f_name,reg_no,school,passout_yr) VALUES
+('A','23BCE8001','SCOPE',2027),
+('B','23BCE8002','SENSE',2027),
+('C','23BCE8003','VSL',2027),
+('D','23BCE8004','MECH',2027);
+
+INSERT into vitap(f_name,reg_no,school,passout_yr) VALUES
+('E','23BCE8005','SCOPE',2027),
+('F','23BCE8006','SENSE',2027),
+('G','23BCE8007','VSL',2027),
+('H','23BCE8008','MECH',2027);
+
+SELECT * FROM vitap;
+ALTER TABLE vitap ADD(
+    s_phnum VARCHAR(200)
+);
+
+desc vitap;
+
+ALTER table vitap drop column phone;
+ALTER TABLE vitap ADD(
+	S_country varchar(100) default "India"
+);
+
+update vitap set f_name='A' WHERE f_name='B';
