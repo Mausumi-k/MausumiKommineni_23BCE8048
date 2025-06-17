@@ -1,0 +1,158 @@
+{
+  "info": {
+    "name": "Skill Swap",
+    "_postman_id": "b4d4f4f2-1234-4ad4-9aa6-1234567890ab",
+    "description": "Postman collection for the Skill Swap project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User Registration",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"Mausumi\",\n  \"email\": \"string@gmail.com\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:27018/api/users/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "27018",
+          "path": ["api", "users", "register"]
+        }
+      }
+    },
+    {
+      "name": "User Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"string@gmail.com\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:27018/api/users/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "27018",
+          "path": ["api", "users", "login"]
+        }
+      }
+    },
+    {
+      "name": "Create Skill",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"React Basics\",\n  \"description\": \"Intro to React\",\n  \"category\": \"Frontend\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:27018/api/skills",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "27018",
+          "path": ["api", "skills"]
+        }
+      }
+    },
+    {
+      "name": "Get All Skills",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:27018/api/skills",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "27018",
+          "path": ["api", "skills"]
+        }
+      }
+    },
+    {
+      "name": "Update Skill",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Advanced React\",\n  \"description\": \"Hooks and Redux\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:27018/api/skills/{{skillId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "27018",
+          "path": ["api", "skills", "{{skillId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Skill",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:27018/api/skills/{{skillId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "27018",
+          "path": ["api", "skills", "{{skillId}}"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "skillId",
+      "value": ""
+    }
+  ]
+}
