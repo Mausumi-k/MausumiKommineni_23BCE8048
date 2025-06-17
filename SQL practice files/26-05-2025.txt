@@ -1,0 +1,261 @@
+show databases;
+CREATE DATABASE vit;
+USE vit;
+
+CREATE TABLE students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    department VARCHAR(50)
+);
+
+CREATE TABLE courses (
+    course_id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100),
+    credits INT
+);
+
+CREATE TABLE enrollments (
+    enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    semester VARCHAR(10),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+INSERT INTO students (name, email, department) VALUES
+('Ananya Sharma', 'ananya@vit.ac.in', 'CSE'),
+('Rahul Verma', 'rahul@vit.ac.in', 'ECE');
+
+INSERT INTO courses (course_name, credits) VALUES
+('Data Structures', 4),
+('Digital Electronics', 3);
+
+INSERT INTO enrollments (student_id, course_id, semester) VALUES
+(1, 1, 'Spring'),
+(2, 2, 'Spring');
+
+---------DBConnection------------------
+package connection;
+
+import java.sql.*;
+import java.sql.DriverManager;
+
+public class DBConnection {
+	public static void main(String[] args){
+		try{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/vit","root","gemini4th!");
+			System.out.println(con);
+			
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery("select * from courses");
+			
+			while(rs.next())
+		    System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getInt(3));
+			con.close();
+		}
+		catch(Exception e){
+			System.out.println("Sorry for inconvience's pls check the credenticals");
+			System.out.println("Connection failed. Details:");
+            e.printStackTrace();
+		}
+	}
+}
+
+-----------------------DB_Connection------------------
+package crud_operations;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+
+
+public class crud_operation {
+	public class DB_Connection {
+		public static void main(String[] args){
+			DB_Connection obj_DB_Connection= new DB_Connection();
+			System.out.println(obj_DB_Connection.get_connection());
+			
+			try{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/vit","root","gemini4th!");
+				System.out.println(con);
+			}
+			catch(Exception e){
+				System.out.println(e);
+			}
+		}
+
+		private char[] get_connection() {
+			return null;
+		}
+	}
+
+}
+
+--------------------------crud_operations-------------------------------------
+package crud_operation;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Scanner;
+
+import crud_operations.crud_operation.DB_Connection;
+
+public class crud_operation {
+
+    public static void main(String[] args) {
+        crud_operation objTest = new crud_operation();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter number of courses to insert: ");
+        int n = scanner.nextInt();
+        scanner.nextLine();
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter course name: ");
+            String courseName = scanner.nextLine();
+
+            System.out.print("Enter credits: ");
+            int credits = scanner.nextInt();
+            scanner.nextLine();
+
+            objTest.insertCourse(courseName, credits);
+        }
+
+        scanner.close();
+    }
+
+    public void insertCourse(String courseName, int credits) {
+        DB_Connection db = new DB_Connection();
+        Connection connection = db.get_connection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "INSERT INTO courses (course_name, credits) VALUES (?, ?)";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, courseName);
+            ps.setInt(2, credits);
+
+            System.out.println("Executing: " + ps);
+            ps.executeUpdate();
+            System.out.println("Course inserted successfully!");
+        } catch (Exception e) {
+            System.out.println("Error inserting course: " + e.getMessage());
+        }}
+    public void read_data() {
+           DB_Connection obj_DB_Connection = new DB_Connection();
+            Connection connection1 = obj_DB_Connection.get_connection();
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            try {
+                String query = "SELECT * FROM student";
+                ps = connection1.prepareStatement(query);
+                System.out.println(ps);
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    System.out.println("S1 no - " + rs.getInt(1));
+                    System.out.println("name - " + rs.getString(2));
+                    System.out.println("email - " + rs.getString(3));
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    public void getCourseById(int courseId) {
+        DB_Connection db = new DB_Connection();
+        Connection connection = db.get_connection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String query = "SELECT * FROM courses WHERE course_id = ?";
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, courseId);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("Course ID: " + rs.getInt("course_id"));
+                System.out.println("Course Name: " + rs.getString("course_name"));
+                System.out.println("Credits: " + rs.getInt("credits"));
+                System.out.println("Department: " + rs.getString("department"));
+                System.out.println("Semester Offered: " + rs.getString("semester_offered"));
+            } else {
+                System.out.println("No course found with the given ID.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching course: " + e.getMessage());
+        }
+    }
+
+    public void updateCourse(int courseId, String newName, int newCredits) {
+        DB_Connection db = new DB_Connection();
+        Connection connection = db.get_connection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "UPDATE courses SET course_name = ?, credits = ? WHERE course_id = ?";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, newName);
+            ps.setInt(2, newCredits);
+            ps.setInt(3, courseId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Course updated successfully!");
+            } else {
+                System.out.println("No course found with the given ID.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error updating course: " + e.getMessage());
+        }
+    }
+    public void alterCoursesTable() {
+        DB_Connection db = new DB_Connection();
+        Connection connection = db.get_connection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "ALTER TABLE courses ADD COLUMN course_code VARCHAR(10)";
+            ps = connection.prepareStatement(query);
+            ps.executeUpdate();
+            System.out.println("Table altered successfully!");
+        } catch (Exception e) {
+            System.out.println("Error altering table: " + e.getMessage());
+        }
+    }
+    public void deleteCourse(int courseId) {
+        DB_Connection db = new DB_Connection();
+        Connection connection = db.get_connection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "DELETE FROM courses WHERE course_id = ?";
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, courseId);
+            System.out.println("Executing: " + ps);
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Course deleted successfully!");
+            } else {
+                System.out.println("No course found with the given ID.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error deleting course: " + e.getMessage());
+        }
+    }
+
+     
+}
+
+
+
+
+
+
